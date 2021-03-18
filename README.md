@@ -1,6 +1,6 @@
 # se_file_server
 
-##Dependencies
+## Dependencies
 - MySQL Driver
 - Spring Security
 - Spring Boot DevTools
