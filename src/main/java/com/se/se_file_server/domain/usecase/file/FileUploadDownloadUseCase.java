@@ -1,8 +1,10 @@
 package com.se.se_file_server.domain.usecase.file;
 
-import com.se.exception.FileDownloadException;
-import com.se.exception.FileUploadException;
+import com.se.se_file_server.exception.FileDownloadException;
+import com.se.se_file_server.exception.FileUploadException;
 import com.se.se_file_server.config.FileUploadProperties;
+
+import com.se.se_file_server.domain.usecase.UseCase;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,16 +15,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
-public class FileUploadDownloadService {
+@UseCase
+public class FileUploadDownloadUseCase {
   private final Path fileLocation;
 
   @Autowired
-  public FileUploadDownloadService(FileUploadProperties prop){
+  public FileUploadDownloadUseCase(FileUploadProperties prop){
     this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
 
     try {

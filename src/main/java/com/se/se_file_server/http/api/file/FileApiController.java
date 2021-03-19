@@ -2,7 +2,7 @@ package com.se.se_file_server.http.api.file;
 
 import com.se.se_file_server.domain.entity.file.File;
 
-import com.se.se_file_server.domain.usecase.file.FileUploadDownloadService;
+import com.se.se_file_server.domain.usecase.file.FileUploadDownloadUseCase;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class FileApiController {
   private static final Logger logger = LoggerFactory.getLogger(FileApiController.class);
 
   @Autowired
-  private FileUploadDownloadService service;
+  private FileUploadDownloadUseCase fileUploadDownloadUseCase;
 
   @GetMapping("/")
   public String controllerMain() {
@@ -43,7 +43,7 @@ public class FileApiController {
 
   @PostMapping("/uploadFile")
   public File uploadFile(@RequestParam("file") MultipartFile file) {
-    String savedFileName = service.storeFile(file);
+    String savedFileName = fileUploadDownloadUseCase.storeFile(file);
 
     String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/file/")
@@ -68,7 +68,7 @@ public class FileApiController {
   @GetMapping("/downloadFile/{fileName:.+}")
   public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
     // Load file as Resource
-    Resource resource = service.loadFileAsResource(fileName);
+    Resource resource = fileUploadDownloadUseCase.loadFileAsResource(fileName);
 
     // Try to determine file's content type
     String contentType = null;
