@@ -1,0 +1,27 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size:
+      max-request-size:
+  datasource:
+    dirver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
+    password:
+
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+logging:
+  level:
+    org:
+      hibernate: info
+
+
+
+file:
+  upload-dir:

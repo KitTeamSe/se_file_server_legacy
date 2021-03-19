@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form action="http://localhost:8080/file/upload/uploadFile/1" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file">
+        <input type="submit" name="submit" value="Upload Single File">
+    </form>
+	
+	<form action="http://localhost:8080/file/upload/uploadMultipleFiles/1" method="post" enctype="multipart/form-data">
+        <input multiple type="file" name="files" id="files">
+        <input type="submit" name="submit" value="Upload Multiple Files">
+    </form>
+</body>
+</html>

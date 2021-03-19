@@ -7,21 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Table(name="attachment")
 public class File extends BaseEntity {
 
   // 첨부파일 PK
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long fileId;
+  private Long id;
 
   // 게시글 PK
-  @Size(min = 5, max = 20)
-  @Column
+  @Column(nullable = false)
   private Long postId;
   
   // 원본 파일명
@@ -54,7 +55,7 @@ public class File extends BaseEntity {
   }
 
   public static File createFile(
-      @Size(min = 5, max = 20) Long postId,
+      Long postId,
       @Size(min = 2, max = 40) String originalName,
       @Size(min = 2, max = 40) String saveName,
       @Size(min = 2, max = 40) String fileType,

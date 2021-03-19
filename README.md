@@ -7,5 +7,5 @@
 - Lombok
 - Spring Data JPA
 - Validation
-- H2 Database
+- ~~H2 Database~~
 - Spring Web

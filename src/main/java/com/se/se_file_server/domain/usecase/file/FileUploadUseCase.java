@@ -1,8 +1,10 @@
 package com.se.se_file_server.domain.usecase.file;
 
 import com.se.se_file_server.config.FileUploadProperties;
+import com.se.se_file_server.domain.entity.file.File;
 import com.se.se_file_server.domain.usecase.UseCase;
 import com.se.se_file_server.exception.FileUploadException;
+import com.se.se_file_server.repository.file.FileJpaRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +20,9 @@ public class FileUploadUseCase {
   private final Path fileLocation;
 
   @Autowired
+  private FileJpaRepository fileJpaRepository;
+
+  @Autowired
   public FileUploadUseCase(FileUploadProperties prop) {
     this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
 
@@ -28,7 +33,7 @@ public class FileUploadUseCase {
     }
   }
 
-  public String storeFile(MultipartFile file) {
+  public File storeFile(Long postId, MultipartFile file) {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
     try {
@@ -49,7 +54,12 @@ public class FileUploadUseCase {
 
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-      return saveName;
+      // 파일 정보 DB에 저장
+      File saveFile = new File(postId, file.getOriginalFilename(), saveName, file.getContentType(), file.getSize());
+
+      fileJpaRepository.save(saveFile);
+
+      return saveFile;
     }catch(Exception e) {
       throw new FileUploadException("["+fileName+"] 파일 업로드에 실패하였습니다. 다시 시도하십시오.",e);
     }

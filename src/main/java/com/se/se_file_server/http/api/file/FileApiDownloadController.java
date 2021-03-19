@@ -3,6 +3,8 @@ package com.se.se_file_server.http.api.file;
 import com.se.se_file_server.domain.usecase.file.FileDownloadUseCase;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +27,11 @@ public class FileApiDownloadController {
   @Autowired
   private FileDownloadUseCase fileDownloadUseCase;
 
-  @GetMapping("/{fileName:.+}")
-  public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+  @GetMapping("/{saveName:.+}")
+  public ResponseEntity<Resource> downloadFile(@PathVariable String saveName, HttpServletRequest request)
+      throws UnsupportedEncodingException {
     // Load file as Resource
-    Resource resource = fileDownloadUseCase.loadFileAsResource(fileName);
+    Resource resource = fileDownloadUseCase.loadFileAsResource(saveName);
 
     // Try to determine file's content type
     String contentType = null;
@@ -43,10 +46,17 @@ public class FileApiDownloadController {
       contentType = "application/octet-stream";
     }
 
+    // 원본 저장명을 가져온다.
+    String originalFileName = fileDownloadUseCase.getOriginalName(saveName);
+
+    // 한글 출력 문제 해결
+    originalFileName = new String(originalFileName.getBytes(StandardCharsets.UTF_8),
+        StandardCharsets.ISO_8859_1);
+
     return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(contentType))
         .header(
-            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFileName + "\"")
         .body(resource);
   }
 }
