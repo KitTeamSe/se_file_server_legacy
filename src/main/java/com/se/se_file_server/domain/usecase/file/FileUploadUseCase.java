@@ -1,11 +1,8 @@
 package com.se.se_file_server.domain.usecase.file;
 
-import com.se.se_file_server.exception.FileDownloadException;
-import com.se.se_file_server.exception.FileUploadException;
 import com.se.se_file_server.config.FileUploadProperties;
-
 import com.se.se_file_server.domain.usecase.UseCase;
-import java.net.MalformedURLException;
+import com.se.se_file_server.exception.FileUploadException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,17 +10,15 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @UseCase
-public class FileUploadDownloadUseCase {
+public class FileUploadUseCase {
   private final Path fileLocation;
 
   @Autowired
-  public FileUploadDownloadUseCase(FileUploadProperties prop){
+  public FileUploadUseCase(FileUploadProperties prop) {
     this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
 
     try {
@@ -59,21 +54,4 @@ public class FileUploadDownloadUseCase {
       throw new FileUploadException("["+fileName+"] 파일 업로드에 실패하였습니다. 다시 시도하십시오.",e);
     }
   }
-
-  public Resource loadFileAsResource(String fileName) {
-    try {
-      Path filePath = this.fileLocation.resolve(fileName).normalize();
-      Resource resource = new UrlResource(filePath.toUri());
-
-      if(resource.exists()) {
-        return resource;
-      }else {
-        throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.");
-      }
-    }catch(MalformedURLException e) {
-      throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.", e);
-    }
-  }
-
-
 }
