@@ -26,9 +26,9 @@ public class FileDownloadUseCase {
     this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
 
     try {
-      Files.createDirectories(this.fileLocation);
+      Files.exists(this.fileLocation);
     }catch(Exception e) {
-      throw new FileUploadException("파일을 업로드할 디렉토리를 생성하지 못했습니다.", e);
+      throw new FileUploadException("파일을 다운로드할 디렉토리를 찾지 못했습니다.", e);
     }
   }
 
