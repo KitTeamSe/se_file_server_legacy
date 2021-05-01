@@ -20,8 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping(value = "file/upload")
 public class FileApiUploadController {
 
-  private static final Logger logger = LoggerFactory.getLogger(FileApiUploadController.class);
-
   @Autowired
   private FileUploadService fileUploadUseCase;
 
@@ -34,8 +32,6 @@ public class FileApiUploadController {
         .path("/download/")
         .path(savedFile.getSaveName())
         .toUriString();
-
-    // 일단 테스트로 다운로드 Uri 넘겨줌. fileDownloadUri를 DB에 저장하고, 원할 때 보여주면 됨.
 
     return fileDownloadUri;
   }

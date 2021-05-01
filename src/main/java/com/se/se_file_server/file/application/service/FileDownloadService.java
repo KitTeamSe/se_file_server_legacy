@@ -27,7 +27,8 @@ public class FileDownloadService {
 
     try {
       Files.exists(this.fileLocation);
-    }catch(Exception e) {
+    }
+    catch(Exception e) {
       throw new BusinessException(FileDownloadErrorCode.DOWNLOAD_PATH_DOES_NOT_EXISTS);
     }
   }
@@ -37,12 +38,12 @@ public class FileDownloadService {
       Path filePath = this.fileLocation.resolve(fileName).normalize();
       Resource resource = new UrlResource(filePath.toUri());
 
-      if(resource.exists()) {
+      if(resource.exists())
         return resource;
-      }else {
+      else
         throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
-      }
-    }catch(MalformedURLException e) {
+    }
+    catch(MalformedURLException e) {
       throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
     }
   }

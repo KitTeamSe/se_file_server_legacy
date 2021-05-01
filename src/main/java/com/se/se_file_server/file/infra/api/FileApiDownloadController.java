@@ -37,7 +37,8 @@ public class FileApiDownloadController {
     String contentType = null;
     try {
       contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-    } catch (IOException ex) {
+    }
+    catch (IOException ex) {
       logger.info("Could not determine file type.");
     }
 
