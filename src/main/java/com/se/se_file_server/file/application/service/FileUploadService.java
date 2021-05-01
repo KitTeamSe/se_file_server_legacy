@@ -1,8 +1,9 @@
 package com.se.se_file_server.file.application.service;
 
+import com.se.se_file_server.common.domain.exception.BusinessException;
 import com.se.se_file_server.config.FileUploadProperties;
+import com.se.se_file_server.file.application.error.FileUploadErrorCode;
 import com.se.se_file_server.file.domain.entity.File;
-import com.se.se_file_server.file.application.error.FileUploadException;
 import com.se.se_file_server.file.infra.repository.FileJpaRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,21 +30,21 @@ public class FileUploadService {
     try {
       Files.createDirectories(this.fileLocation);
     }catch(Exception e) {
-      throw new FileUploadException("파일을 업로드할 디렉토리를 생성하지 못했습니다.", e);
+      throw new BusinessException(FileUploadErrorCode.UPLOAD_PATH_DOES_NOT_EXISTS);
     }
   }
 
   public File storeFile(Long postId, MultipartFile file) {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+    // 파일명에 부적합 문자가 있는지 확인한다.
+    if(fileName.contains(".."))
+      throw new BusinessException(FileUploadErrorCode.INVALID_FILE_NAME);
+
+    if(file.getSize() < 1)
+      throw new BusinessException(FileUploadErrorCode.INVALID_FILE_SIZE);
+
     try {
-      // 파일명에 부적합 문자가 있는지 확인한다.
-      if(fileName.contains(".."))
-        throw new FileUploadException("파일명에 부적합 문자가 포함되어 있습니다. " + fileName);
-
-      if(file.getSize() < 1)
-        throw new FileUploadException("유효하지 않은 파일 크기입니다. " + fileName);
-
       final String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
       /* 서버에 저장할 파일명 (랜덤 문자열 + 확장자) */
@@ -61,7 +62,7 @@ public class FileUploadService {
 
       return saveFile;
     }catch(Exception e) {
-      throw new FileUploadException("["+fileName+"] 파일 업로드에 실패하였습니다. 다시 시도하십시오.",e);
+      throw new BusinessException(FileUploadErrorCode.UNKNOWN_UPLOAD_ERROR_CAUSED);
     }
   }
 }

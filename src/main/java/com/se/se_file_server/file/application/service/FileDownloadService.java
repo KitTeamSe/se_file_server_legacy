@@ -1,9 +1,9 @@
 package com.se.se_file_server.file.application.service;
 
+import com.se.se_file_server.common.domain.exception.BusinessException;
 import com.se.se_file_server.config.FileUploadProperties;
 import com.se.se_file_server.file.domain.entity.File;
-import com.se.se_file_server.file.application.error.FileDownloadException;
-import com.se.se_file_server.file.application.error.FileUploadException;
+import com.se.se_file_server.file.application.error.FileDownloadErrorCode;
 import com.se.se_file_server.file.infra.repository.FileJpaRepository;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -28,7 +28,7 @@ public class FileDownloadService {
     try {
       Files.exists(this.fileLocation);
     }catch(Exception e) {
-      throw new FileUploadException("파일을 다운로드할 디렉토리를 찾지 못했습니다.", e);
+      throw new BusinessException(FileDownloadErrorCode.DOWNLOAD_PATH_DOES_NOT_EXISTS);
     }
   }
 
@@ -40,10 +40,10 @@ public class FileDownloadService {
       if(resource.exists()) {
         return resource;
       }else {
-        throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.");
+        throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
       }
     }catch(MalformedURLException e) {
-      throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.", e);
+      throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
     }
   }
 
