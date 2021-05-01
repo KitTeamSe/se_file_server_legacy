@@ -29,7 +29,8 @@ public class FileUploadService {
 
     try {
       Files.createDirectories(this.fileLocation);
-    }catch(Exception e) {
+    }
+    catch(Exception e) {
       throw new BusinessException(FileUploadErrorCode.UPLOAD_PATH_DOES_NOT_EXISTS);
     }
   }
@@ -41,6 +42,7 @@ public class FileUploadService {
     if(fileName.contains(".."))
       throw new BusinessException(FileUploadErrorCode.INVALID_FILE_NAME);
 
+    // 파일 크기가 유효한지 확인한다.
     if(file.getSize() < 1)
       throw new BusinessException(FileUploadErrorCode.INVALID_FILE_SIZE);
 
@@ -48,10 +50,15 @@ public class FileUploadService {
       final String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
       /* 서버에 저장할 파일명 (랜덤 문자열 + 확장자) */
-      String randomUUID = UUID.randomUUID().toString().replaceAll("-", "");
-      final String saveName = randomUUID + "." + extension;
+      String randomUUID, saveName;
+      Path targetLocation;
 
-      Path targetLocation = this.fileLocation.resolve(saveName);
+      do{
+        randomUUID = UUID.randomUUID().toString().replaceAll("-", "");
+        saveName = randomUUID + "." + extension;
+        targetLocation = this.fileLocation.resolve(saveName);
+      }
+      while(isSameFileNameExists(targetLocation));
 
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
@@ -61,8 +68,13 @@ public class FileUploadService {
       fileJpaRepository.save(saveFile);
 
       return saveFile;
-    }catch(Exception e) {
+    }
+    catch(Exception e) {
       throw new BusinessException(FileUploadErrorCode.UNKNOWN_UPLOAD_ERROR_CAUSED);
     }
+  }
+
+  private boolean isSameFileNameExists(Path targetLocation){
+    return Files.exists(targetLocation);
   }
 }
