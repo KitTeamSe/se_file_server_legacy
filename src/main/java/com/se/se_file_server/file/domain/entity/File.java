@@ -1,7 +1,7 @@
-package com.se.se_file_server.domain.entity.file;
+package com.se.se_file_server.file.domain.entity;
 
 
-import com.se.se_file_server.domain.entity.BaseEntity;
+import com.se.se_file_server.common.domain.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

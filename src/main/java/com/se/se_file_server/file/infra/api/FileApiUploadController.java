@@ -1,8 +1,7 @@
-package com.se.se_file_server.http.api.file;
+package com.se.se_file_server.file.infra.api;
 
-import com.se.se_file_server.domain.entity.file.File;
-import com.se.se_file_server.domain.usecase.file.FileUploadUseCase;
-import java.util.ArrayList;
+import com.se.se_file_server.file.domain.entity.File;
+import com.se.se_file_server.file.application.service.FileUploadService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class FileApiUploadController {
   private static final Logger logger = LoggerFactory.getLogger(FileApiUploadController.class);
 
   @Autowired
-  private FileUploadUseCase fileUploadUseCase;
+  private FileUploadService fileUploadUseCase;
 
   @PostMapping("/uploadFile/{postId}")
   public String uploadFile(@PathVariable Long postId, @RequestParam("file") MultipartFile file){

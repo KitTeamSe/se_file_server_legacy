@@ -1,6 +1,6 @@
-package com.se.se_file_server.http.api.file;
+package com.se.se_file_server.file.infra.api;
 
-import com.se.se_file_server.domain.usecase.file.FileDownloadUseCase;
+import com.se.se_file_server.file.application.service.FileDownloadService;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +25,7 @@ public class FileApiDownloadController {
   private static final Logger logger = LoggerFactory.getLogger(FileApiDownloadController.class);
 
   @Autowired
-  private FileDownloadUseCase fileDownloadUseCase;
+  private FileDownloadService fileDownloadUseCase;
 
   @GetMapping("/{saveName:.+}")
   public ResponseEntity<Resource> downloadFile(@PathVariable String saveName, HttpServletRequest request)

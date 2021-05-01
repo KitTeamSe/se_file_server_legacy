@@ -1,4 +1,4 @@
-package com.se.se_file_server.domain.entity;
+package com.se.se_file_server.common.domain.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

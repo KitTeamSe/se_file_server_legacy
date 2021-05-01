@@ -1,11 +1,10 @@
-package com.se.se_file_server.domain.usecase.file;
+package com.se.se_file_server.file.application.service;
 
 import com.se.se_file_server.config.FileUploadProperties;
-import com.se.se_file_server.domain.entity.file.File;
-import com.se.se_file_server.domain.usecase.UseCase;
-import com.se.se_file_server.exception.FileDownloadException;
-import com.se.se_file_server.exception.FileUploadException;
-import com.se.se_file_server.repository.file.FileJpaRepository;
+import com.se.se_file_server.file.domain.entity.File;
+import com.se.se_file_server.file.application.error.FileDownloadException;
+import com.se.se_file_server.file.application.error.FileUploadException;
+import com.se.se_file_server.file.infra.repository.FileJpaRepository;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,16 +12,17 @@ import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 
-@UseCase
-public class FileDownloadUseCase {
+@Service
+public class FileDownloadService {
   private final Path fileLocation;
 
   @Autowired
   private FileJpaRepository fileJpaRepository;
 
   @Autowired
-  public FileDownloadUseCase(FileUploadProperties prop) {
+  public FileDownloadService(FileUploadProperties prop) {
     this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
 
     try {

@@ -1,4 +1,4 @@
-package com.se.se_file_server.exception;
+package com.se.se_file_server.file.application.error;
 
 public class FileUploadException extends RuntimeException{
 
