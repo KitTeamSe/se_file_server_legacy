@@ -5,8 +5,6 @@ import com.se.se_file_server.file.application.service.FileUploadService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +19,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class FileApiUploadController {
 
   @Autowired
-  private FileUploadService fileUploadUseCase;
+  private FileUploadService fileUploadService;
 
-  @PostMapping("/uploadFile/{postId}")
-  public String uploadFile(@PathVariable Long postId, @RequestParam("file") MultipartFile file){
-    File savedFile = fileUploadUseCase.storeFile(postId, file);
+  @PostMapping("/uploadFile")
+  public String uploadFile(@RequestParam("file") MultipartFile file){
+    File savedFile = fileUploadService.storeFile(file);
 
     String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/file/")
@@ -36,11 +34,11 @@ public class FileApiUploadController {
     return fileDownloadUri;
   }
 
-  @PostMapping("/uploadMultipleFiles/{postId}")
-  public List<String> uploadMultipleFiles(@PathVariable Long postId, @RequestParam("files") MultipartFile[] files){
+  @PostMapping("/uploadMultipleFiles")
+  public List<String> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files){
     return Arrays.asList(files)
         .stream()
-        .map(file -> uploadFile(postId, file))
+        .map(file -> uploadFile(file))
         .collect(Collectors.toList());
   }
 

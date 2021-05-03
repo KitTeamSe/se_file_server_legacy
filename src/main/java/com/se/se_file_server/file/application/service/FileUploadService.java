@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
+
   private final Path fileLocation;
+  private final long maxFileSize;
 
   @Autowired
   private FileJpaRepository fileJpaRepository;
@@ -33,9 +35,11 @@ public class FileUploadService {
     catch(Exception e) {
       throw new BusinessException(FileUploadErrorCode.UPLOAD_PATH_DOES_NOT_EXISTS);
     }
+
+    maxFileSize = prop.getMaxFileSize();
   }
 
-  public File storeFile(Long postId, MultipartFile file) {
+  public File storeFile(MultipartFile file) {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
     // 파일명에 부적합 문자가 있는지 확인한다.
@@ -43,8 +47,11 @@ public class FileUploadService {
       throw new BusinessException(FileUploadErrorCode.INVALID_FILE_NAME);
 
     // 파일 크기가 유효한지 확인한다.
-    if(file.getSize() < 1)
+    if(file.getSize() <= 0)
       throw new BusinessException(FileUploadErrorCode.INVALID_FILE_SIZE);
+
+    if(file.getSize() >= maxFileSize)
+      throw new BusinessException(FileUploadErrorCode.FILE_SIZE_LIMIT_EXCEEDED);
 
     try {
       final String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -63,9 +70,19 @@ public class FileUploadService {
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
       // 파일 정보 DB에 저장
-      File saveFile = new File(postId, file.getOriginalFilename(), saveName, file.getContentType(), file.getSize());
+      File saveFile = new File(file.getOriginalFilename(), saveName, file.getContentType(), file.getSize());
 
-      fileJpaRepository.save(saveFile);
+      try{
+        fileJpaRepository.save(saveFile);
+      }
+      catch (Exception ex){
+        java.io.File savedFile = new java.io.File(targetLocation.toString());
+        if(savedFile.exists())
+          savedFile.delete();
+
+        throw new BusinessException(FileUploadErrorCode.DATABASE_ERROR_CAUSED);
+      }
+
 
       return saveFile;
     }

@@ -20,23 +20,19 @@ public class File extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  // 게시글 PK
-  @Column(nullable = false)
-  private Long postId;
   
   // 원본 파일명
-  @Size(min = 2, max = 40)
+  @Size(min = 1, max = 255)
   @Column(nullable = false)
   private String originalName;
 
   // 저장 파일명
-  @Size(min = 2, max = 40)
+  @Size(min = 1, max = 255)
   @Column(nullable = false)
   private String saveName;
 
   // 파일 유형
-  @Size(min = 2, max = 40)
+  @Size(min = 1, max = 40)
   @Column(nullable = false)
   private String fileType;
 
@@ -46,28 +42,11 @@ public class File extends BaseEntity {
 
   protected File(){}
 
-  public File(Long postId, String originalName, String saveName, String fileType, Long size) {
-    this.postId = postId;
+  public File(@Size(min = 1, max = 255) String originalName,
+      @Size(min = 1, max = 255)  String saveName, @Size(min = 1, max = 40) String fileType, Long size) {
     this.originalName = originalName;
     this.saveName = saveName;
     this.fileType = fileType;
     this.size = size;
-  }
-
-  public static File createFile(
-      Long postId,
-      @Size(min = 2, max = 40) String originalName,
-      @Size(min = 2, max = 40) String saveName,
-      @Size(min = 2, max = 40) String fileType,
-      Long size){
-
-    File file = new File();
-    file.postId = postId;
-    file.originalName = originalName;
-    file.saveName = saveName;
-    file.fileType = fileType;
-    file.size = size;
-
-    return file;
   }
 }

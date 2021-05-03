@@ -25,13 +25,13 @@ public class FileApiDownloadController {
   private static final Logger logger = LoggerFactory.getLogger(FileApiDownloadController.class);
 
   @Autowired
-  private FileDownloadService fileDownloadUseCase;
+  private FileDownloadService fileDownloadService;
 
   @GetMapping("/{saveName:.+}")
   public ResponseEntity<Resource> downloadFile(@PathVariable String saveName, HttpServletRequest request)
       throws UnsupportedEncodingException {
     // Load file as Resource
-    Resource resource = fileDownloadUseCase.loadFileAsResource(saveName);
+    Resource resource = fileDownloadService.loadFileAsResource(saveName);
 
     // Try to determine file's content type
     String contentType = null;
@@ -48,7 +48,7 @@ public class FileApiDownloadController {
     }
 
     // 원본 저장명을 가져온다.
-    String originalFileName = fileDownloadUseCase.getOriginalName(saveName);
+    String originalFileName = fileDownloadService.getOriginalName(saveName);
 
     // 한글 출력 문제 해결
     originalFileName = new String(originalFileName.getBytes(StandardCharsets.UTF_8),

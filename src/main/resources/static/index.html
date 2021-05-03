@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <form action="http://localhost:8080/file/upload/uploadFile/1" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <form action="../file/upload/uploadFile" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
         <input type="file" name="file" id="file">
         <input type="submit" name="submit" value="Upload Single File">
     </form>
 	
-	<form action="http://localhost:8080/file/upload/uploadMultipleFiles/1" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+	<form action="../file/upload/uploadMultipleFiles" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
         <input multiple type="file" name="files" id="files">
         <input type="submit" name="submit" value="Upload Multiple Files">
     </form>
