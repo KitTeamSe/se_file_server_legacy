@@ -1,10 +1,10 @@
-package com.se.se_file_server.config;
+package com.se.se_file_server.file.infra.config;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "se-file-server")
 @Getter
 @Setter
 public class FileUploadProperties {

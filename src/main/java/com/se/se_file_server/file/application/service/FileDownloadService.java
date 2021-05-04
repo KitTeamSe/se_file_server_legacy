@@ -1,7 +1,7 @@
 package com.se.se_file_server.file.application.service;
 
 import com.se.se_file_server.common.domain.exception.BusinessException;
-import com.se.se_file_server.config.FileUploadProperties;
+import com.se.se_file_server.file.infra.config.FileUploadProperties;
 import com.se.se_file_server.file.domain.entity.File;
 import com.se.se_file_server.file.application.error.FileDownloadErrorCode;
 import com.se.se_file_server.file.infra.repository.FileJpaRepository;

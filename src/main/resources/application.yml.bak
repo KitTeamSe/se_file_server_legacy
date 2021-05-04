@@ -4,8 +4,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: -1
+      max-request-size: -1
   datasource:
     dirver-class-name: com.mysql.cj.jdbc.Driver
     url:
@@ -24,5 +24,6 @@ logging:
     org:
       hibernate: info
 
-file:
+se-file-server:
   upload-dir:
+  max-file-size :

@@ -1,6 +1,6 @@
 package com.se.se_file_server;
 
-import com.se.se_file_server.config.FileUploadProperties;
+import com.se.se_file_server.file.infra.config.FileUploadProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
