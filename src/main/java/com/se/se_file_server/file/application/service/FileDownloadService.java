@@ -44,21 +44,23 @@ public class FileDownloadService {
   public Resource loadFileAsResource(String fileName) {
     try {
       Path filePath = this.fileLocation.resolve(fileName).normalize();
-      logger.debug("[DOWNLOAD] Download path is " + filePath.toString());
+      logger.debug("[DL Service] Download path is " + filePath.toString());
 
       Resource resource = new UrlResource(filePath.toUri());
 
-      if(resource.exists()){
-        logger.debug("[DOWNLOAD] Resource exists at " + resource.getFile().getAbsolutePath());
-        return resource;
-      }
-      else{
+      if(!resource.exists())
         throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
-      }
+
+      logger.debug("[DL Service] Resource's description is " + resource.getDescription());
+      logger.debug("[DL Service] Resource exists at " + resource.getFile().getAbsolutePath());
+      return resource;
 
     }
     catch (MalformedURLException e) {
       throw new BusinessException(FileDownloadErrorCode.FILE_DOES_NOT_EXISTS);
+    }
+    catch (BusinessException be){
+      throw be;
     }
     catch (Exception e){
       throw new BusinessException(FileDownloadErrorCode.UNKNOWN_DOWNLOAD_ERROR);

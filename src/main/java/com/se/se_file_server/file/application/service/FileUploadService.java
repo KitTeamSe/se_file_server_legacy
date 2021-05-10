@@ -82,16 +82,16 @@ public class FileUploadService {
 
       try{
         fileJpaRepository.save(saveFile);
-        logger.debug("[UPLOAD] File saved at " + targetLocation);
+        logger.debug("[UL Service] File saved at " + targetLocation);
       }
       catch (Exception ex){
         java.io.File savedFile = new java.io.File(targetLocation.toString());
         if(savedFile.exists())
           savedFile.delete();
 
+        logger.debug("[UL Service] Failed to save file at " + targetLocation);
         throw new BusinessException(FileUploadErrorCode.DATABASE_ERROR_CAUSED);
       }
-
 
       return saveFile;
     }
