@@ -16,9 +16,9 @@ public class FileDeleteApiController {
   @Autowired
   private FileDeleteService fileDeleteService;
 
-  @GetMapping("/{fileName:.+}")
-  public SuccessResponse delete(@PathVariable String fileName){
-    fileDeleteService.delete(fileName);
+  @GetMapping(value = {"/{saveName:.+}", "/fileName=saveName"})
+  public SuccessResponse delete(@PathVariable("saveName") String saveName){
+    fileDeleteService.delete(saveName);
     return new SuccessResponse<>(HttpStatus.OK.value(), "파일 삭제에 성공했습니다.");
   }
 

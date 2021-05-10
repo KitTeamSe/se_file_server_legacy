@@ -5,6 +5,7 @@ import com.se.se_file_server.file.application.error.FileDeleteErrorCode;
 import com.se.se_file_server.file.domain.entity.File;
 import com.se.se_file_server.file.infra.repository.FileJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class FileDeleteService {
 
+  @Autowired
   private final FileJpaRepository fileJpaRepository;
 
   @Transactional
