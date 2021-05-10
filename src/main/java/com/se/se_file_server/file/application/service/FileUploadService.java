@@ -1,6 +1,7 @@
 package com.se.se_file_server.file.application.service;
 
 import com.se.se_file_server.common.domain.exception.BusinessException;
+import com.se.se_file_server.file.infra.api.FileDownloadApiController;
 import com.se.se_file_server.file.infra.config.FileUploadProperties;
 import com.se.se_file_server.file.application.error.FileUploadErrorCode;
 import com.se.se_file_server.file.domain.entity.File;
@@ -11,12 +12,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Transactional(readOnly = true)
 public class FileUploadService {
 
   private final Path fileLocation;
@@ -24,6 +29,8 @@ public class FileUploadService {
 
   @Autowired
   private FileJpaRepository fileJpaRepository;
+
+  private static final Logger logger = LoggerFactory.getLogger(FileDownloadApiController.class);
 
   @Autowired
   public FileUploadService(FileUploadProperties prop) {
@@ -39,6 +46,7 @@ public class FileUploadService {
     maxFileSize = prop.getMaxFileSize();
   }
 
+  @Transactional
   public File storeFile(MultipartFile file) {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -74,6 +82,7 @@ public class FileUploadService {
 
       try{
         fileJpaRepository.save(saveFile);
+        logger.debug("[UPLOAD] File saved at " + targetLocation);
       }
       catch (Exception ex){
         java.io.File savedFile = new java.io.File(targetLocation.toString());
@@ -87,7 +96,7 @@ public class FileUploadService {
       return saveFile;
     }
     catch(Exception e) {
-      throw new BusinessException(FileUploadErrorCode.UNKNOWN_UPLOAD_ERROR_CAUSED);
+      throw new BusinessException(FileUploadErrorCode.UNKNOWN_UPLOAD_ERROR);
     }
   }
 
