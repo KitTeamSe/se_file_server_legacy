@@ -1,6 +1,7 @@
 package com.se.se_file_server.file.application.service;
 
 import com.se.se_file_server.common.domain.exception.BusinessException;
+import com.se.se_file_server.file.application.error.FileUploadErrorCode;
 import com.se.se_file_server.file.infra.config.FileUploadProperties;
 import com.se.se_file_server.file.domain.entity.File;
 import com.se.se_file_server.file.application.error.FileDownloadErrorCode;
@@ -50,7 +51,9 @@ public class FileDownloadService {
 
   public String getOriginalName(String saveName){
     // DB에서 원본파일명으로 복구함.
-    File file = fileJpaRepository.findBySaveName(saveName);
+    File file = fileJpaRepository.findBySaveName(saveName).orElseThrow(() -> {
+      throw new BusinessException(FileUploadErrorCode.FILE_DOES_NOT_EXISTS);
+    });
     return file.getOriginalName();
   }
 }

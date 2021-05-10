@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "file/download")
-public class FileApiDownloadController {
+public class FileDownloadApiController {
 
-  private static final Logger logger = LoggerFactory.getLogger(FileApiDownloadController.class);
+  private static final Logger logger = LoggerFactory.getLogger(FileDownloadApiController.class);
 
   @Autowired
   private FileDownloadService fileDownloadService;

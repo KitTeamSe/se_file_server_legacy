@@ -16,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "file/upload")
-public class FileApiUploadController {
+public class FileUploadApiController {
 
   @Autowired
   private FileUploadService fileUploadService;
