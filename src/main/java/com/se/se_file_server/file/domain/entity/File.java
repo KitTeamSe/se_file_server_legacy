@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name="attachment")
+@Table(name="attachment", indexes = {@Index(columnList = "saveName")})
 public class File extends BaseEntity {
 
   // 첨부파일 PK
@@ -28,7 +29,7 @@ public class File extends BaseEntity {
 
   // 저장 파일명
   @Size(min = 1, max = 255)
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String saveName;
 
   // 파일 유형
