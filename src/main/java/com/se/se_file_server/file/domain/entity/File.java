@@ -10,11 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name="attachment", indexes = {@Index(columnList = "saveName")})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class File extends BaseEntity {
 
   // 첨부파일 PK
@@ -41,13 +44,16 @@ public class File extends BaseEntity {
   @Column(nullable = false)
   private Long size;
 
-  protected File(){}
+  @Column(nullable = false)
+  private String downloadUrl;
 
   public File(@Size(min = 1, max = 255) String originalName,
-      @Size(min = 1, max = 255)  String saveName, @Size(min = 1, max = 40) String fileType, Long size) {
+      @Size(min = 1, max = 255)  String saveName, @Size(min = 1, max = 40) String fileType,
+      Long size, String downloadUrl) {
     this.originalName = originalName;
     this.saveName = saveName;
     this.fileType = fileType;
     this.size = size;
+    this.downloadUrl = downloadUrl;
   }
 }
