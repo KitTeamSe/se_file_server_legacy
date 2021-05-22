@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 @Transactional(readOnly = true)
@@ -77,8 +78,10 @@ public class FileUploadService {
 
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+      String fileDownloadUri = createDownloadUri(saveName);
+
       // 파일 정보 DB에 저장
-      File saveFile = new File(file.getOriginalFilename(), saveName, file.getContentType(), file.getSize());
+      File saveFile = new File(file.getOriginalFilename(), saveName, file.getContentType(), file.getSize(), fileDownloadUri);
 
       try{
         fileJpaRepository.save(saveFile);
@@ -102,5 +105,13 @@ public class FileUploadService {
 
   private boolean isSameFileNameExists(Path targetLocation){
     return Files.exists(targetLocation);
+  }
+
+  private String createDownloadUri(String saveName){
+    return  ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path("/file/")
+        .path("/download/")
+        .path(saveName)
+        .toUriString();
   }
 }

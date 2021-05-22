@@ -17,6 +17,7 @@ public class GlobalControllerAdvice {
   protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
     ErrorCode errorCode = e.getErrorCode();
     final ErrorResponse response = ErrorResponse.of(errorCode);
+    e.printStackTrace();
     return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
   }
 }
