@@ -1,9 +1,11 @@
+server:
+  port: 8070
 spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size:
-      max-request-size:
+      max-file-size: -1
+      max-request-size: -1
   datasource:
     dirver-class-name: com.mysql.cj.jdbc.Driver
     url:
@@ -11,17 +13,17 @@ spring:
     password:
 
   jpa:
-    generate-ddl: false
-    show-sql: true
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show-sql: true
 
 logging:
   level:
     org:
       hibernate: info
 
-
-
-file:
+se-file-server:
   upload-dir:
+  max-file-size :

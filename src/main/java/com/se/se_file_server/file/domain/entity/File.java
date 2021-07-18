@@ -7,36 +7,36 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name="attachment")
+@Table(name="attachment", indexes = {@Index(columnList = "saveName")})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class File extends BaseEntity {
 
   // 첨부파일 PK
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  // 게시글 PK
-  @Column(nullable = false)
-  private Long postId;
   
   // 원본 파일명
-  @Size(min = 2, max = 40)
+  @Size(min = 1, max = 255)
   @Column(nullable = false)
   private String originalName;
 
   // 저장 파일명
-  @Size(min = 2, max = 40)
-  @Column(nullable = false)
+  @Size(min = 1, max = 255)
+  @Column(nullable = false, unique = true)
   private String saveName;
 
   // 파일 유형
-  @Size(min = 2, max = 40)
+  @Size(min = 1, max = 40)
   @Column(nullable = false)
   private String fileType;
 
@@ -44,30 +44,16 @@ public class File extends BaseEntity {
   @Column(nullable = false)
   private Long size;
 
-  protected File(){}
+  @Column(nullable = false)
+  private String downloadUrl;
 
-  public File(Long postId, String originalName, String saveName, String fileType, Long size) {
-    this.postId = postId;
+  public File(@Size(min = 1, max = 255) String originalName,
+      @Size(min = 1, max = 255)  String saveName, @Size(min = 1, max = 40) String fileType,
+      Long size, String downloadUrl) {
     this.originalName = originalName;
     this.saveName = saveName;
     this.fileType = fileType;
     this.size = size;
-  }
-
-  public static File createFile(
-      Long postId,
-      @Size(min = 2, max = 40) String originalName,
-      @Size(min = 2, max = 40) String saveName,
-      @Size(min = 2, max = 40) String fileType,
-      Long size){
-
-    File file = new File();
-    file.postId = postId;
-    file.originalName = originalName;
-    file.saveName = saveName;
-    file.fileType = fileType;
-    file.size = size;
-
-    return file;
+    this.downloadUrl = downloadUrl;
   }
 }
